@@ -3,6 +3,7 @@ import { ClientGrpc } from '@nestjs/microservices';
 
 interface UserService {
   getUser(data: { id: string }): any;
+  getTest(data: { id: string }): any;
 }
 
 @Controller()
@@ -18,6 +19,11 @@ export class AppController {
   @Get('user/:id')
   getUser(@Param('id') id: string) {
     return this.userService.getUser({ id });
+  }
+
+  @Get('test/:id')
+  getTest(@Param('id') id: string) {
+    return this.userService.getTest({ id });
   }
 
   @Get()

@@ -10,4 +10,9 @@ export class AppController {
   getUser(data: { id: string }) {
     return this.appService.getUserById(data.id);
   }
+
+  @GrpcMethod('UserService', 'GetTest')
+  getTest(data: { id: string }) {
+    return this.appService.getUserTest(data.id);
+  }
 }

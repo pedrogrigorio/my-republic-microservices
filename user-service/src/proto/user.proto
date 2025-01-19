@@ -5,6 +5,7 @@ package user;
 
 service UserService {
   rpc GetUser (UserRequest) returns (UserResponse);
+  rpc GetTest (UserRequest) returns (UserResponse);
 }
 
 message UserRequest {
