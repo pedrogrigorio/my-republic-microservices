@@ -10,7 +10,7 @@ async function bootstrap() {
       options: {
         package: 'user',
         protoPath: 'src/proto/user.proto',
-        url: 'localhost:3002',
+        url: 'user_service:3002',
       },
     },
   );

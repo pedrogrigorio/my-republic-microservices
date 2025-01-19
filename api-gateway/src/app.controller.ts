@@ -19,4 +19,9 @@ export class AppController {
   getUser(@Param('id') id: string) {
     return this.userService.getUser({ id });
   }
+
+  @Get()
+  helloWorld() {
+    return 'Hello World';
+  }
 }

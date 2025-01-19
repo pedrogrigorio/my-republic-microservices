@@ -1,0 +1,20 @@
+# Imagem base do Node.js
+FROM node:20-alpine
+
+# Diretório de trabalho no container
+WORKDIR /usr/src/app
+
+# Copia o restante dos arquivos
+COPY . .
+
+# Instala as dependências
+RUN npm install
+
+# Compila o TypeScript
+RUN npm run build
+
+# Expõe a porta 3001
+EXPOSE 3001
+
+# Comando para iniciar o app
+CMD ["npm", "run", "start:prod"]
