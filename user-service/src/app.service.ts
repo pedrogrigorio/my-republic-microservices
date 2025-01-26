@@ -1,64 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from './infrastructure/services/prisma.service';
 
 @Injectable()
 export class AppService {
   constructor(private prisma: PrismaService) {}
 
-  private users = [
-    { id: '1', name: 'Alice', email: 'alice@example.com' },
-    { id: '2', name: 'Bob', email: 'bob@example.com' },
-  ];
+  // async getAllUsers() {
+  //   const users = await this.prisma.user.findMany();
 
-  async getUserTest(id: string) {
-    // const user = this.users.find((user) => user.id === id);
-    const numberId = parseInt(id);
+  //   console.log('busquei usuários');
+  //   const usersList = users.map((user) => ({
+  //     id: user.id,
+  //     name: user.name,
+  //     email: user.email,
+  //     imgSrc: user.imgSrc,
+  //     gender: user.gender,
+  //   }));
 
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: numberId,
-      },
-    });
+  //   console.log(usersList);
+  //   return usersList;
+  // }
 
-    if (!user) {
-      return { id: '', name: 'Not Found', email: '' };
-    }
+  // async getUserById(id: any) {
+  //   const existingUser = await this.prisma.user.findUnique({
+  //     where: {
+  //       id,
+  //     },
+  //   });
 
-    return {
-      id: user.id.toString(),
-      name: user.name,
-      email: user.email,
-    };
-  }
+  //   if (!existingUser) {
+  //     console.log('Não tem usuário');
+  //   }
 
-  async getUserById(id: string) {
-    // const user = this.users.find((user) => user.id === id);
-    console.log(id);
-    const numberId = parseInt(id);
+  //   if (!existingUser.imgSrc) {
+  //     existingUser.imgSrc = '';
+  //   }
 
-    const existingUser = await this.prisma.user.findUnique({
-      where: {
-        id: numberId,
-      },
-    });
-
-    if (existingUser) {
-      return { id, name: 'User Already Exists', email: '' };
-    }
-
-    const user = await this.prisma.user.create({
-      data: {
-        name: `Usuário ${numberId}`,
-        email: `test${numberId}@gmail.com`,
-        password: '123',
-        gender: 'MALE',
-      },
-    });
-
-    return {
-      id: user.id.toString(),
-      name: user.name,
-      email: user.email,
-    };
-  }
+  //   return {
+  //     id: existingUser.id,
+  //     name: existingUser.name,
+  //     email: existingUser.email,
+  //     imgSrc: existingUser.imgSrc,
+  //     gender: existingUser.gender,
+  //   };
+  // }
 }

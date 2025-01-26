@@ -1,18 +1,29 @@
 import { Controller } from '@nestjs/common';
 import { AppService } from './app.service';
-import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @GrpcMethod('UserService', 'GetUser')
-  getUser(data: { id: string }) {
-    return this.appService.getUserById(data.id);
-  }
+  // @GrpcMethod('UserService', 'getAllUsers')
+  // async GetAllUsers() {
+  //   console.log('Get All Users');
+  //   const users = await this.appService.getAllUsers();
+  //   return { users };
+  // }
 
-  @GrpcMethod('UserService', 'GetTest')
-  getTest(data: { id: string }) {
-    return this.appService.getUserTest(data.id);
-  }
+  // @GrpcMethod('UserService', 'getUserById')
+  // async getUserById(data: any) {
+  //   const user = await this.appService.getUserById(data.id);
+
+  //   return { user };
+  // }
+
+  // @GrpcMethod('UserService', 'deleteUser')
+  // async deleteUser(data: any) {
+  //   console.log('Delete User');
+  //   console.log(data);
+  //   return;
+  //   return this.appService.getUserTest(data.id);
+  // }
 }

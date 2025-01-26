@@ -1,23 +1,18 @@
+import { JwtAuthGuard } from './auth/infrastrucutre/guards/jwt-auth.guard';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [
-    ClientsModule.register([
-      {
-        name: 'USER_SERVICE',
-        transport: Transport.GRPC,
-        options: {
-          package: 'user',
-          protoPath: 'src/proto/user.proto',
-          url: 'user_service:3002',
-        },
-      },
-    ]),
+  imports: [UserModule, AuthModule, ConfigModule.forRoot({ isGlobal: true })],
+  controllers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
