@@ -1,0 +1,10 @@
+// src/proto/advertisement.proto
+syntax = "proto3";
+
+package advertisement;
+
+service AdvertisementService {
+  rpc getAllAdvertisements (Empty) returns (Empty);
+}
+
+message Empty {}

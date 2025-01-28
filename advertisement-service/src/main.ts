@@ -8,14 +8,14 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        package: 'user',
-        protoPath: 'src/proto/user.proto',
-        url: 'user_service:3002',
+        package: 'advertisement',
+        protoPath: 'src/proto/advertisement.proto',
+        url: 'advertisement_service:3003',
       },
     },
   );
 
   await app.listen();
-  console.log('User Service is running on port 3002 🚀');
+  console.log('Advertisement Service is running on port 3003 🚀');
 }
 bootstrap();

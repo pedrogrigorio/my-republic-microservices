@@ -2,9 +2,8 @@ import { ClientGrpc, ClientsModule, Transport } from '@nestjs/microservices';
 import { UserController } from './user.controller';
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
-// import { ValidateUserUseCase } from './validate-user.usecase';
-import { HashingService } from 'src/auth/application/interfaces/hashing.service.interface';
-import { BCryptHashingService } from 'src/auth/infrastrucutre/services/bcrypt-hashing.service';
+import { HashingService } from '../auth/application/interfaces/hashing.service.interface';
+import { BCryptHashingService } from '../auth/infrastrucutre/services/bcrypt-hashing.service';
 
 @Module({
   imports: [
@@ -14,7 +13,7 @@ import { BCryptHashingService } from 'src/auth/infrastrucutre/services/bcrypt-ha
         transport: Transport.GRPC,
         options: {
           package: 'user',
-          protoPath: 'src/user/proto/user.proto',
+          protoPath: 'src/modules/user/proto/user.proto',
           url: 'user_service:3002',
         },
       },

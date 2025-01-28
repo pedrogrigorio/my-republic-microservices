@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { PrismaService } from './infrastructure/services/prisma.service';
 import { UserController } from './presentation/user.controller';
 import { SignUpUseCase } from './application/use-cases/sign-up.usecase';
@@ -18,12 +17,11 @@ import { PrismaUserRepository } from './infrastructure/repositories/prisma-user-
 import { BCryptHashingService } from './infrastructure/services/bcrypt-hashing.service';
 import { S3StorageService } from './infrastructure/services/s3-storage.service';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from './app.service';
 import { ValidateUserUseCase } from './application/use-cases/validate-user.usecase';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true })],
-  controllers: [AppController, UserController],
+  controllers: [UserController],
   providers: [
     ValidateUserUseCase,
     SignUpUseCase,
@@ -36,7 +34,6 @@ import { ValidateUserUseCase } from './application/use-cases/validate-user.useca
     UpdatePhotoUseCase,
     DeleteUserUseCase,
     PrismaService,
-    AppService,
     {
       provide: UserRepository,
       useClass: PrismaUserRepository,

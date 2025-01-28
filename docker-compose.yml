@@ -30,6 +30,20 @@ services:
     networks:
       - app-network
 
+  advertisement_service:
+    build: 
+      context: ./advertisement-service
+      dockerfile: Dockerfile.dev
+    container_name: advertisement-service
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./advertisement-service/src:/usr/src/app/src
+      - /usr/src/app/node_modules
+      - ./advertisement-service/prisma/dev.db:/usr/src/app/prisma/dev.db
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

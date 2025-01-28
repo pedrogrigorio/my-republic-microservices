@@ -39,26 +39,28 @@ export class UserController {
 
   @Get()
   async getAllUsers() {
-    return await firstValueFrom(this.userService.getAllUsers({})).catch((e) => {
+    const { users } = await firstValueFrom(
+      this.userService.getAllUsers({}),
+    ).catch((e) => {
       throw new RpcException(e);
     });
+
+    return users;
   }
 
   @Get(':id')
-  // @UseGuards(UserOwnership)
   async getUser(@Param('id') userId: string) {
     const id = parseInt(userId);
-    const response = await firstValueFrom(
+    const { user } = await firstValueFrom(
       this.userService.getUserById({ id }),
     ).catch((e) => {
       throw new RpcException(e);
     });
 
-    return response;
+    return user;
   }
 
   @Patch(':id/update-name')
-  // @UseGuards(UserOwnership)
   async updateName(
     @Body() updateNameDto: UpdateNameDto,
     @Param('id') userId: string,
@@ -75,7 +77,6 @@ export class UserController {
   }
 
   @Patch(':id/update-email')
-  // @UseGuards(UserOwnership)
   async updateEmail(
     @Body() updateEmailDto: UpdateEmailDto,
     @Param('id') userId: string,
@@ -93,7 +94,6 @@ export class UserController {
   }
 
   @Patch(':id/update-password')
-  // @UseGuards(UserOwnership)
   async updatePassword(
     @Body() updatePasswordDto: UpdatePasswordDto,
     @Param('id') userId: string,
@@ -110,7 +110,6 @@ export class UserController {
   }
 
   @Patch(':id/update-photo')
-  // @UseGuards(UserOwnership)
   @UseInterceptors(FileInterceptor('file'))
   async updatePhoto(
     @UploadedFile(
@@ -145,7 +144,6 @@ export class UserController {
   }
 
   @Delete(':id')
-  // @UseGuards(UserOwnership)
   async deleteUser(@Param('id') userId: string) {
     const id = parseInt(userId);
     await firstValueFrom(this.userService.deleteUser({ id })).catch((e) => {

@@ -1,4 +1,4 @@
-import { HashingService } from 'src/auth/application/interfaces/hashing.service.interface';
+import { HashingService } from '../../application/interfaces/hashing.service.interface';
 import * as bcrypt from 'bcrypt';
 
 export class BCryptHashingService implements HashingService {
