@@ -1,10 +1,10 @@
 import { PasswordNotMatchException } from '../../domain/exceptions/password-not-match.exception';
 import { InvalidPasswordException } from '../../domain/exceptions/invalid-password.exception';
 import { UserNotFoundException } from '../../domain/exceptions/user-not-found.exception';
-import { updatePasswordDto } from '../dtos/update-password.dto';
 import { UserRepository } from '../interfaces/user.repository.interface';
 import { Injectable } from '@nestjs/common';
 import { HashingService } from '../interfaces/hashing.service.interface';
+import { UpdatePasswordDto } from '../dtos/update-password.dto';
 
 @Injectable()
 export class UpdatePasswordUseCase {
@@ -14,7 +14,7 @@ export class UpdatePasswordUseCase {
   ) {}
 
   async execute(
-    updatePasswordDto: updatePasswordDto,
+    updatePasswordDto: UpdatePasswordDto,
     userId: number,
   ): Promise<void> {
     const { oldPassword, newPassword, confirmNewPassword } = updatePasswordDto;
