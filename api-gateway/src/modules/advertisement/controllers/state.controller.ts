@@ -1,23 +1,30 @@
-// import { Controller, Get, Post } from '@nestjs/common';
-// import { PopulateStatesUseCase } from '../../application/use-cases/populate-states.usecase';
-// import { GetAllStatesUseCase } from '../../application/use-cases/get-all-states.usecase';
-// import { isPublic } from '@src/core/decorators/is-public.decorator';
+import { Controller, Get, Inject } from '@nestjs/common';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
+import { StateService } from '../services/state.service';
+import { firstValueFrom } from 'rxjs';
 
-// @Controller('states')
-// export class StateController {
-//   constructor(
-//     private getAllStatesUseCase: GetAllStatesUseCase,
-//     private populateStatesUseCase: PopulateStatesUseCase,
-//   ) {}
+@Controller('states')
+export class StateController {
+  private stateService: StateService;
 
-//   @Get()
-//   async getAllStates() {
-//     return await this.getAllStatesUseCase.execute();
-//   }
+  constructor(
+    @Inject('ADVERTISEMENT_SERVICE') private advertisementClient: ClientGrpc,
+  ) {}
 
-//   @isPublic()
-//   @Post('populate')
-//   async populateStates() {
-//     return await this.populateStatesUseCase.execute();
-//   }
-// }
+  onModuleInit() {
+    this.stateService =
+      this.advertisementClient.getService<StateService>('StateService');
+  }
+
+  @Get()
+  async getAllStates() {
+    console.log('Get todos os estados');
+    const { states } = await firstValueFrom(
+      this.stateService.getAllStates({}),
+    ).catch((e) => {
+      throw new RpcException(e);
+    });
+
+    return states;
+  }
+}

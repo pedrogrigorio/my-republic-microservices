@@ -4,7 +4,202 @@ syntax = "proto3";
 package advertisement;
 
 service AdvertisementService {
-  rpc getAllAdvertisements (Empty) returns (Empty);
+  rpc getAllAdvertisements (Empty) returns (AdvertisementListResponse);
+  rpc searchAdvertisementsByCity (SearchAdvertisementsByCityRequest) returns (AdvertisementSearchResultResponse);
+  rpc getAdvertisementByOwner (GetAdvertisementByOwnerRequest) returns (AdvertisementsPageResponse);
+  rpc getAdvertisementById (GetAdvertisementByIdRequest) returns (AdvertisementResponse);
+  rpc createAdvertisement (CreateAdvertisementRequest) returns (Empty);
+  rpc updateAdvertisement (UpdateAdvertisementRequest) returns (Empty);
+  rpc pauseAdvertisement (PauseAdvertisementRequest) returns (Empty);
+  rpc deleteAdvertisement (DeleteAdvertisementRequest) returns (Empty);
+}
+
+service StateService {
+  rpc getAllStates (Empty) returns (StateListResponse);
+}
+
+service CityService {
+  rpc getAllCities (Empty) returns (CityListResponse);
+  rpc getCitiesByState (GetCitiesByStateRequest) returns (CityListResponse);
+  rpc searchCities (SearchCitiesRequest) returns (CityListResponse);
 }
 
 message Empty {}
+
+message FileDto {
+  string buffer = 1;
+  string mimetype = 2;
+  string name = 3;
+}
+
+message AmenitiesDto {
+  bool furnishedResidence = 1;
+  bool garage = 2;
+  bool airConditioning = 3;
+  bool swimmingPool = 4;
+  bool gym = 5;
+  bool nearbyMarket = 6;
+  bool laundry = 7;
+  bool publicTransportNearby = 8;
+}
+
+message RulesDto {
+  bool noSmoking = 1;
+  bool noAlcohol = 2;
+  bool noParties = 3;
+  bool noPets = 4;
+  bool noNoiseAfter10 = 5;
+  bool noUncleanAreas = 6;
+  bool noSharingKeys = 7;
+  bool noOvernightGuests = 8;
+}
+
+message AdvertisementFormDataDto {
+  string title = 2;
+  string description = 3;
+  float price = 4;
+  string genderPreference = 5;
+  bool allowOppositeGender = 6;
+  int32 totalSlots = 7;
+  int32 occupiedSlots = 8;
+  string bedroomType = 9;
+  int32 numBedroom = 10;
+  int32 numBathroom = 11;
+  bool hasPet = 12;
+  string phone = 13;
+  int32 cityId = 16;
+  int32 stateId = 17;
+  int32 ownerId = 18;
+  AmenitiesDto amenities = 20;
+  RulesDto rules = 19;
+}
+
+// =========================================
+// Requests
+// =========================================
+
+message GetCitiesByStateRequest {
+  int32 stateId = 1;
+}
+
+message SearchCitiesRequest {
+  string term = 1;
+}
+
+message SearchAdvertisementsByCityRequest {
+  int32 cityId = 1;
+  int32 pageNumber = 2;
+  int32 pageSizeNumber = 3;
+}
+
+message GetAdvertisementByOwnerRequest {
+  int32 ownerId = 1;
+  int32 pageNumber = 2;
+  int32 pageSizeNumber = 3;
+}
+
+message GetAdvertisementByIdRequest {
+  int32 id = 1;
+}
+
+message CreateAdvertisementRequest {
+  AdvertisementFormDataDto createAdvertisementDto = 1;
+  FileDto file = 2;
+}
+
+message UpdateAdvertisementRequest {
+  int32 id = 1;
+  AdvertisementFormDataDto updateAdvertisementDto = 2;
+  FileDto file = 3;
+}
+
+message PauseAdvertisementRequest {
+  int32 id = 1;
+}
+
+message DeleteAdvertisementRequest {
+  int32 id = 1;
+}
+
+// =========================================
+// Responses
+// =========================================
+
+message State {
+  int32 id = 1;
+  string uf = 2;
+  string name = 3;
+}
+
+message City {
+  int32 id = 1;
+  string name = 2;
+  State state = 3;
+}
+
+message Rule {
+  int32 id = 1;
+  string tag = 2;
+  string value = 3;
+}
+
+message Amenity {
+  int32 id = 1;
+  string tag = 2;
+  string value = 3;
+}
+
+message Owner {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Advertisement {
+  int32 id = 1;
+  string title = 2;
+  string description = 3;
+  float price = 4;
+  string genderPreference = 5;
+  bool allowOppositeGender = 6;
+  int32 totalSlots = 7;
+  int32 occupiedSlots = 8;
+  string bedroomType = 9;
+  int32 numBedroom = 10;
+  int32 numBathroom = 11;
+  bool hasPet = 12;
+  string phone = 13;
+  bool isActive = 14;
+  string imgSrc = 15;
+  City city = 16;
+  State state = 17;
+  Owner owner = 18;
+  repeated Rule rules = 19;
+  repeated Amenity amenities = 20;
+}
+
+message StateListResponse {
+  repeated State states = 1;
+}
+
+message CityListResponse {
+  repeated City cities = 1;
+}
+
+message AdvertisementResponse {
+  Advertisement advertisement = 1;
+}
+
+message AdvertisementListResponse {
+  repeated Advertisement advertisements = 1;
+}
+
+message AdvertisementSearchResultResponse {
+  int32 total = 1;
+  City city = 2;
+  repeated Advertisement advertisements = 3;
+}
+
+message AdvertisementsPageResponse {
+  int32 total = 1;
+  repeated Advertisement advertisements = 2;
+}

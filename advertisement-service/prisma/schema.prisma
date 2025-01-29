@@ -12,3 +12,83 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Advertisement {
+  id                  Int     @id @default(autoincrement())
+  title               String
+  description         String
+  price               Float
+  genderPreference    String  @map("gender_preference")
+  allowOppositeGender Boolean @map("allow_opposite_gender")
+  totalSlots          Int     @map("total_slots")
+  occupiedSlots       Int     @map("occupied_slots")
+  phone               String
+  bedroomType         String  @map("bedroom_type")
+  numBedroom          Int     @map("num_bedroom")
+  numBathroom         Int     @map("num_bathroom")
+  hasPet              Boolean @map("has_pet")
+  isActive            Boolean @default(true) @map("is_active")
+  imgSrc              String? @map("img_src")
+
+  ownerId Int   @map("owner_id")
+  stateId Int   @map("state_id")
+  cityId  Int   @map("city_id")
+  owner   Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  state   State @relation(fields: [stateId], references: [id])
+  city    City  @relation(fields: [cityId], references: [id])
+
+  rules     Rule[]    @relation("AdvertisementRules")
+  amenities Amenity[] @relation("AdvertisementAmenities")
+  // applications Application[]
+
+  @@map("advertisements")
+}
+
+model State {
+  id            Int             @id @default(autoincrement())
+  uf            String          @unique
+  name          String
+  cities        City[]
+  advetisements Advertisement[]
+
+  @@map("states")
+}
+
+model City {
+  id            Int             @id @default(autoincrement())
+  name          String
+  state         State           @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  stateId       Int
+  advetisements Advertisement[]
+
+  @@unique([name, stateId])
+  @@map("cities")
+}
+
+model Rule {
+  id    Int    @id @default(autoincrement())
+  tag   String @unique
+  value String
+
+  advertisements Advertisement[] @relation("AdvertisementRules")
+
+  @@map("rules")
+}
+
+model Amenity {
+  id    Int    @id @default(autoincrement())
+  tag   String @unique
+  value String
+
+  advertisements Advertisement[] @relation("AdvertisementAmenities")
+
+  @@map("amenities")
+}
+
+model Owner {
+  id            Int             @id @default(autoincrement())
+  name          String
+  advertisement Advertisement[]
+
+  @@map("owners")
+}

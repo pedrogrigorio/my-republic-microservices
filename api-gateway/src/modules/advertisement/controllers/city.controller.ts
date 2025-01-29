@@ -1,39 +1,54 @@
-// import { Controller, Get, Post, Query } from '@nestjs/common';
-// import { PopulateCitiesUseCase } from '../../application/use-cases/populate-cities.usecase';
-// import { GetAllCitiesUseCase } from '../../application/use-cases/get-all-cities.usecase';
-// import { SearchCitiesUseCase } from '../../application/use-cases/search-cities.usecase';
-// import { isPublic } from '@src/core/decorators/is-public.decorator';
-// import { GetCitiesByStateIdUseCase } from '../../application/use-cases/get-cities-by-state-id.usecase';
+import { Controller, Get, Inject, Query } from '@nestjs/common';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
+import { CityService } from '../services/city.service';
+import { firstValueFrom } from 'rxjs';
 
-// @Controller('cities')
-// export class CityController {
-//   constructor(
-//     private getAllCitiesUseCase: GetAllCitiesUseCase,
-//     private populateCitiesUseCase: PopulateCitiesUseCase,
-//     private searchCitiesUseCase: SearchCitiesUseCase,
-//     private getCitiesByStateIdUseCase: GetCitiesByStateIdUseCase,
-//   ) {}
+@Controller('cities')
+export class CityController {
+  private cityService: CityService;
 
-//   @Get()
-//   async getAllCities() {
-//     return await this.getAllCitiesUseCase.execute();
-//   }
+  constructor(
+    @Inject('ADVERTISEMENT_SERVICE')
+    private advertisementClient: ClientGrpc,
+  ) {}
 
-//   @Get('by-state')
-//   async getCitiesByState(@Query('stateId') stateId: string) {
-//     const id = parseInt(stateId);
+  onModuleInit() {
+    this.cityService =
+      this.advertisementClient.getService<CityService>('CityService');
+  }
 
-//     return await this.getCitiesByStateIdUseCase.execute(id);
-//   }
+  @Get()
+  async getAllCities() {
+    const { cities } = await firstValueFrom(
+      this.cityService.getAllCities({}),
+    ).catch((e) => {
+      throw new RpcException(e);
+    });
 
-//   @Get('search')
-//   async searchCities(@Query('term') searchTerm: string) {
-//     return await this.searchCitiesUseCase.execute(searchTerm);
-//   }
+    return cities;
+  }
 
-//   @isPublic()
-//   @Post('populate')
-//   async populateCities() {
-//     return await this.populateCitiesUseCase.execute();
-//   }
-// }
+  @Get('by-state')
+  async getCitiesByState(@Query('stateId') stateId: string) {
+    const id = parseInt(stateId);
+
+    const { cities } = await firstValueFrom(
+      this.cityService.getCitiesByState({ stateId: id }),
+    ).catch((e) => {
+      throw new RpcException(e);
+    });
+
+    return cities;
+  }
+
+  @Get('search')
+  async searchCities(@Query('term') searchTerm: string) {
+    const { cities } = await firstValueFrom(
+      this.cityService.searchCities({ term: searchTerm }),
+    ).catch((e) => {
+      throw new RpcException(e);
+    });
+
+    return cities;
+  }
+}
