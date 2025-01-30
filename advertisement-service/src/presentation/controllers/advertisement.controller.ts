@@ -8,7 +8,7 @@ import { CreateAdvertisementUseCase } from '../../application/use-cases/create-a
 import { PauseAdvertisementUseCase } from '../../application/use-cases/pause-advertisement.usecase';
 import { GrpcExceptionHandler } from '../handlers/grpc-exception-handler';
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('advertisements')
 export class AdvertisementController {
@@ -22,6 +22,11 @@ export class AdvertisementController {
     private pauseAdvertisementUseCase: PauseAdvertisementUseCase,
     private getAdvertisementById: GetAdvertisementByIdUseCase,
   ) {}
+
+  @MessagePattern('user.created')
+  handleUserCreated(@Payload() data: any) {
+    console.log('Recebido evento de usuário criado:', data);
+  }
 
   @GrpcMethod('AdvertisementService', 'getAllAdvertisements')
   async getAllAdvertisements() {

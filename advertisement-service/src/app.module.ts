@@ -32,9 +32,24 @@ import { PrismaService } from './infratructure/services/prisma.service';
 import { StorageService } from './application/interfaces/storage.service.interface';
 import { S3StorageService } from './infratructure/services/s3-storage.service';
 import { ConfigModule } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [HttpModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [
+    HttpModule, 
+    ConfigModule.forRoot({ isGlobal: true }), 
+    ClientsModule.register([
+      {
+        name: 'KAFKA_CLIENT',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            brokers: ['kafka:9092'],
+          },
+        },
+      },
+    ]),
+  ],
   controllers: [AdvertisementController, StateController, CityController],
   providers: [
     SearchAdvertisementsByCityUseCase,

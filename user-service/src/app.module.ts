@@ -18,9 +18,23 @@ import { BCryptHashingService } from './infrastructure/services/bcrypt-hashing.s
 import { S3StorageService } from './infrastructure/services/s3-storage.service';
 import { ConfigModule } from '@nestjs/config';
 import { ValidateUserUseCase } from './application/use-cases/validate-user.usecase';
+import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true })],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ClientsModule.register([
+      {
+        name: 'KAFKA_CLIENT',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            brokers: ['kafka:9092'],
+          },
+        },
+      },
+    ]),
+  ],
   controllers: [UserController],
   providers: [
     ValidateUserUseCase,
@@ -45,6 +59,11 @@ import { ValidateUserUseCase } from './application/use-cases/validate-user.useca
     {
       provide: HashingService,
       useClass: BCryptHashingService,
+    },
+    {
+      provide: ClientKafka,
+      useFactory: (client: ClientKafka) => client, // Faz a injeção do cliente Kafka corretamente
+      inject: ['KAFKA_CLIENT'], // Injeta o Kafka Client já configurado
     },
   ],
 })
