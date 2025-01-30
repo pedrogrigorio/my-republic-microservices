@@ -44,6 +44,20 @@ services:
     networks:
       - app-network
 
+  application_service:
+    build: 
+      context: ./application-service
+      dockerfile: Dockerfile.dev
+    container_name: application-service
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./application-service/src:/usr/src/app/src
+      - /usr/src/app/node_modules
+      - ./application-service/prisma/dev.db:/usr/src/app/prisma/dev.db
+    networks:
+      - app-network
+  
   kafka:
     image: bitnami/kafka:latest
     restart: on-failure

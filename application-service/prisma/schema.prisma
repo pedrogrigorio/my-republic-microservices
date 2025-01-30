@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Application {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now()) @map("created_at")
+  message   String?
+
+  applicantId     Int            @map("applicant_id")
+  advertisementId Int            @map("advertisement_id")
+  advertisement   Advertisement? @relation(fields: [advertisementId], references: [id])
+  applicant       Applicant?     @relation(fields: [applicantId], references: [id])
+
+  @@unique([applicantId, advertisementId])
+  @@map("applications")
+}
+
+model Applicant {
+  id          Int           @id @default(autoincrement())
+  name        String
+  imgSrc      String?       @map("img_src")
+  application Application[]
+
+  @@map("applicants")
+}
+
+model Advertisement {
+  id          Int           @id @default(autoincrement())
+  title       String
+  imgSrc      String?       @map("img_src")
+  price       Float
+  cityName    String        @map("city_name")
+  stateUF     String        @map("state_uf")
+  application Application[]
+
+  @@map("advertisements")
+}
