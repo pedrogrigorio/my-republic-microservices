@@ -3,19 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  // const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-  //   AppModule,
-  //   {
-  //     transport: Transport.GRPC,
-  //     options: {
-  //       package: 'user',
-  //       protoPath: 'src/proto/user.proto',
-  //       url: 'user_service:3002',
-  //     },
-  //   },
-  // );
-
-  // await app.listen();
   const app = await NestFactory.create(AppModule);
 
   // Configuração do gRPC
@@ -33,7 +20,7 @@ async function bootstrap() {
     transport: Transport.KAFKA,
     options: {
       client: {
-        brokers: ['kafka:9092'], // Endereço do seu broker Kafka
+        brokers: ['kafka:9092'],
       },
       consumer: {
         groupId: 'user-service-consumer',

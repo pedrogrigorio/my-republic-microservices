@@ -1,0 +1,26 @@
+// src/proto/user.proto
+syntax = "proto3";
+
+package application;
+
+service ApplicationService {
+  rpc getAllApplications (Empty) returns (UserListResponse);
+  rpc getApplicationsByUser () returns (UserResponse);
+  rpc getApplicationsByAdvertisement () returns (Empty);
+  rpc apply () returns (Empty);
+  rpc refuseApplication () returns (Empty);
+  rpc acceptApplication () returns (Empty);
+  rpc deleteApplication () returns (Empty);
+}
+
+message Empty {}
+
+// =========================================
+// Requests
+// =========================================
+
+
+
+// =========================================
+// Responses
+// =========================================

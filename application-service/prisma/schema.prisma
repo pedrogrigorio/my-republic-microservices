@@ -41,6 +41,7 @@ model Advertisement {
   price       Float
   cityName    String        @map("city_name")
   stateUF     String        @map("state_uf")
+  isActive    Boolean       @default(true) @map("is_active")
   application Application[]
 
   @@map("advertisements")
