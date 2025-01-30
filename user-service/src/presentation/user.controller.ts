@@ -9,7 +9,7 @@ import { UpdateNameUseCase } from '../application/use-cases/update-name.usecase'
 import { DeleteUserUseCase } from '../application/use-cases/delete-user.usecase';
 import { SignUpUseCase } from '../application/use-cases/sign-up.usecase';
 import { Controller } from '@nestjs/common';
-import { ClientKafka, GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller('users')
 export class UserController {
@@ -23,12 +23,7 @@ export class UserController {
     private updatePhotoUseCase: UpdatePhotoUseCase,
     private deleteUserUseCase: DeleteUserUseCase,
     private validateUserUseCase: ValidateUserUseCase,
-    private readonly kafkaClient: ClientKafka,
   ) {}
-
-  onModuleInit() {
-    this.kafkaClient.subscribeToResponseOf('user.created');
-  }
 
   @GrpcMethod('UserService', 'signUp')
   async signUp(data: any) {
@@ -42,9 +37,6 @@ export class UserController {
   @GrpcMethod('UserService', 'getAllUsers')
   async getAllUsers() {
     try {
-      console.log('Disparando evento');
-      this.kafkaClient.emit('user.created', { id: 5, name: 'João Paulo' });
-
       const users = await this.getAllUsersUseCase.execute();
 
       return { users };

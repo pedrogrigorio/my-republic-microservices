@@ -1,6 +1,7 @@
 import { UserNotFoundException } from '../../domain/exceptions/user-not-found.exception';
 import { StorageService } from '../interfaces/storage.service.interface';
 import { UserRepository } from '../interfaces/user.repository.interface';
+import { ClientKafka } from '@nestjs/microservices';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -8,6 +9,7 @@ export class DeleteUserUseCase {
   constructor(
     private userRepository: UserRepository,
     private storageService: StorageService,
+    private readonly kafkaClient: ClientKafka,
   ) {}
 
   async execute(userId: number): Promise<void> {
@@ -22,5 +24,9 @@ export class DeleteUserUseCase {
     }
 
     await this.userRepository.deleteById(user.id);
+
+    this.kafkaClient.emit('user.deleted', {
+      id: userId,
+    });
   }
 }

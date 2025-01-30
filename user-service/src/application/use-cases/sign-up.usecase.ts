@@ -2,6 +2,7 @@ import { EmailAlreadyExistsException } from '../../domain/exceptions/email-alrea
 import { PasswordNotMatchException } from '../../domain/exceptions/password-not-match.exception';
 import { UserRepository } from '../interfaces/user.repository.interface';
 import { HashingService } from '../interfaces/hashing.service.interface';
+import { ClientKafka } from '@nestjs/microservices';
 import { Injectable } from '@nestjs/common';
 import { SignUpDto } from '../dtos/sign-up.dto';
 import { User } from '../../domain/entities/user';
@@ -11,6 +12,7 @@ export class SignUpUseCase {
   constructor(
     private userRepository: UserRepository,
     private hashingService: HashingService,
+    private readonly kafkaClient: ClientKafka,
   ) {}
 
   async execute(signUpDto: SignUpDto): Promise<void> {
@@ -37,6 +39,11 @@ export class SignUpUseCase {
       gender,
     });
 
-    await this.userRepository.create(user);
+    const createdUser = await this.userRepository.create(user);
+
+    this.kafkaClient.emit('user.created', {
+      id: createdUser.id,
+      name: createdUser.name,
+    });
   }
 }

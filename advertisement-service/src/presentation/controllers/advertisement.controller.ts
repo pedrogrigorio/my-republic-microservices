@@ -23,11 +23,6 @@ export class AdvertisementController {
     private getAdvertisementById: GetAdvertisementByIdUseCase,
   ) {}
 
-  @MessagePattern('user.created')
-  handleUserCreated(@Payload() data: any) {
-    console.log('Recebido evento de usuário criado:', data);
-  }
-
   @GrpcMethod('AdvertisementService', 'getAllAdvertisements')
   async getAllAdvertisements() {
     try {

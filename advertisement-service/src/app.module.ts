@@ -33,6 +33,12 @@ import { StorageService } from './application/interfaces/storage.service.interfa
 import { S3StorageService } from './infratructure/services/s3-storage.service';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { OwnerController } from './presentation/controllers/owner.controller';
+import { OwnerRepository } from './application/interfaces/owner.repository.interface';
+import { PrismaOwnerRepository } from './infratructure/repositories/prisma-owner-repository';
+import { CreateOwnerUseCase } from './application/use-cases/create-owner.usecase';
+import { UpdateOwnerUseCase } from './application/use-cases/update-owner.usecase';
+import { DeleteOwnerUseCase } from './application/use-cases/delete-owner.usecase';
 
 @Module({
   imports: [
@@ -50,7 +56,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       },
     ]),
   ],
-  controllers: [AdvertisementController, StateController, CityController],
+  controllers: [AdvertisementController, StateController, CityController, OwnerController],
   providers: [
     SearchAdvertisementsByCityUseCase,
     GetAdvertisementsByOwnerUseCase,
@@ -65,6 +71,9 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     SearchCitiesUseCase,
     GetAllCitiesUseCase,
     GetAllStatesUseCase,
+    CreateOwnerUseCase,
+    UpdateOwnerUseCase,
+    DeleteOwnerUseCase,
     PrismaService,
     {
       provide: AdvertisementRepository,
@@ -85,6 +94,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     {
       provide: RuleRepository,
       useClass: PrismaRuleRepository,
+    },
+    {
+      provide: OwnerRepository,
+      useClass: PrismaOwnerRepository,
     },
     {
       provide: LocaleService,
