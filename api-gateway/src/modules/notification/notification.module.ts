@@ -11,7 +11,7 @@ import { Module } from '@nestjs/common';
         options: {
           package: 'notification',
           protoPath: 'src/modules/notification/proto/notification.proto',
-          url: 'notification_service:3004',
+          url: 'notification_service:3005',
         },
       },
     ]),
@@ -20,4 +20,4 @@ import { Module } from '@nestjs/common';
   providers: [],
   exports: [],
 })
-export class ApplicationModule {}
+export class NotificationModule {}
