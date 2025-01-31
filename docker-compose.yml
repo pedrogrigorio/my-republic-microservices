@@ -58,6 +58,20 @@ services:
     networks:
       - app-network
   
+  notification_service:
+    build: 
+      context: ./notification-service
+      dockerfile: Dockerfile.dev
+    container_name: notification-service
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./notification-service/src:/usr/src/app/src
+      - /usr/src/app/node_modules
+      - ./notification-service/prisma/dev.db:/usr/src/app/prisma/dev.db
+    networks:
+      - app-network
+
   kafka:
     image: bitnami/kafka:latest
     restart: on-failure

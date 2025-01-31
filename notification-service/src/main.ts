@@ -9,9 +9,9 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: 'application',
-      protoPath: 'src/proto/application.proto',
-      url: 'application_service:3004',
+      package: 'notification',
+      protoPath: 'src/proto/notification.proto',
+      url: 'notification_service:3005',
     },
   });
 
@@ -23,7 +23,7 @@ async function bootstrap() {
         brokers: ['kafka:9092'],
       },
       consumer: {
-        groupId: 'application-service-consumer',
+        groupId: 'notification-service-consumer',
       },
     },
   });
@@ -31,6 +31,6 @@ async function bootstrap() {
   // Inicia os microsserviços conectados
   await app.startAllMicroservices();
 
-  console.log('Application Service is running on port 3004 🚀');
+  console.log('Notification Service is running on port 3005 🚀');
 }
 bootstrap();

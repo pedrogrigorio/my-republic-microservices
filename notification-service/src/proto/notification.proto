@@ -1,0 +1,24 @@
+// src/proto/notification.proto
+syntax = "proto3";
+
+package notification;
+
+service NotificationService {
+  rpc getAllNotifications (Empty) returns ();
+}
+
+// =========================================
+// Data Objects
+// =========================================
+
+message Empty {}
+
+// =========================================
+// Requests
+// =========================================
+
+
+
+// =========================================
+// Responses
+// =========================================
