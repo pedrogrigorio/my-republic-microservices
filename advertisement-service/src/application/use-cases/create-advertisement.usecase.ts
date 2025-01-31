@@ -4,9 +4,10 @@ import { CreateAdvertisementDto } from '../dtos/create-advertisement.dto';
 import { AdvertisementMapper } from '../mappers/advertisement.mapper';
 import { AmenityRepository } from '../interfaces/amenity.repository.interface';
 import { RuleRepository } from '../interfaces/rule.repository.interface';
-import { Advertisement } from '../../domain/entities/advertisement';
-import { Injectable } from '@nestjs/common';
 import { StorageService } from '../interfaces/storage.service.interface';
+import { Advertisement } from '../../domain/entities/advertisement';
+import { ClientKafka } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
 import { FileDto } from '../dtos/file.dto';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class CreateAdvertisementUseCase {
     private amenityRepository: AmenityRepository,
     private ruleRepository: RuleRepository,
     private storageService: StorageService,
+    private readonly kafkaClient: ClientKafka,
   ) {}
 
   async execute(
@@ -44,6 +46,17 @@ export class CreateAdvertisementUseCase {
     const createdAdvertisement =
       await this.advertisementRepository.create(advertisement);
 
+    
+    this.kafkaClient.emit('advertisement.created', {
+      id: createdAdvertisement.id,
+      title: createdAdvertisement.title,
+      imgSrc: createdAdvertisement.imgSrc,
+      price : createdAdvertisement.price,
+      cityName : createdAdvertisement.city.name,
+      stateUF: createdAdvertisement.state.uf,
+      isActive: createdAdvertisement.isActive,
+    });
+    
     return AdvertisementMapper.toDto(createdAdvertisement);
   }
 }

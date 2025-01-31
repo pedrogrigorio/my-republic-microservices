@@ -27,6 +27,7 @@ export class UpdateNameUseCase {
     this.kafkaClient.emit('user.updated', {
       id: updatedUser.id,
       name: updatedUser.name,
+      imgSrc: updatedUser.imgSrc,
     });
   }
 }

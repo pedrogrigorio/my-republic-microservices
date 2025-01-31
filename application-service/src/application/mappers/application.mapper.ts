@@ -6,7 +6,7 @@ export class ApplicationMapper {
     return {
       id: application.id,
       status: application.status,
-      createdAt: application.createdAt,
+      createdAt: application.createdAt.toUTCString(),
       message: application.message,
       applicant: {
         id: application.applicant.id,

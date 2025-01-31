@@ -50,7 +50,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: application-service
     ports:
-      - "3003:3003"
+      - "3004:3004"
     volumes:
       - ./application-service/src:/usr/src/app/src
       - /usr/src/app/node_modules

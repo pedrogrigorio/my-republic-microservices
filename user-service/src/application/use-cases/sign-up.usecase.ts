@@ -44,6 +44,7 @@ export class SignUpUseCase {
     this.kafkaClient.emit('user.created', {
       id: createdUser.id,
       name: createdUser.name,
+      imgSrc: createdUser.imgSrc,
     });
   }
 }

@@ -24,7 +24,8 @@ export class ApplicationController {
   @GrpcMethod('ApplicationService', 'getAllApplications')
   async getAllApplications() {
     try {
-      return await this.getAllApplicationsUseCase.execute();
+      const applications = await this.getAllApplicationsUseCase.execute();
+      return { applications }
     } catch (error) {
       throw GrpcExceptionHandler.handleError(error);
     }
@@ -42,7 +43,7 @@ export class ApplicationController {
   @GrpcMethod('ApplicationService', 'getApplicationsByAdvertisement')
   async getApplicationsByAdvertisement(data: any) {
     try {
-      return await this.getApplicationsByAdvertisementUseCase.execute(data.id);
+      return await this.getApplicationsByAdvertisementUseCase.execute(data.advertisementId);
     } catch (error) {
       throw GrpcExceptionHandler.handleError(error);
     }
@@ -51,9 +52,9 @@ export class ApplicationController {
   @GrpcMethod('ApplicationService', 'apply')
   async apply(data: any) {
     try {
-      return await this.applyUseCase.execute(
+      await this.applyUseCase.execute(
         data.userId,
-        data.createApplicationDto,
+        data.body,
       );
     } catch (error) {
       throw GrpcExceptionHandler.handleError(error);
@@ -63,7 +64,7 @@ export class ApplicationController {
   @GrpcMethod('ApplicationService', 'refuseApplication')
   async refuseApplication(data: any) {
     try {
-      return await this.refuseApplicationUseCase.execute(data.id);
+      await this.refuseApplicationUseCase.execute(data.id);
     } catch (error) {
       throw GrpcExceptionHandler.handleError(error);
     }
@@ -72,7 +73,7 @@ export class ApplicationController {
   @GrpcMethod('ApplicationService', 'acceptApplication')
   async acceptApplication(data: any) {
     try {
-      return await this.acceptApplicationUseCase.execute(data.id);
+      await this.acceptApplicationUseCase.execute(data.id);
     } catch (error) {
       throw GrpcExceptionHandler.handleError(error);
     }

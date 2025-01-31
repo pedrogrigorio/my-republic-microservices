@@ -32,7 +32,7 @@ import { PrismaService } from './infratructure/services/prisma.service';
 import { StorageService } from './application/interfaces/storage.service.interface';
 import { S3StorageService } from './infratructure/services/s3-storage.service';
 import { ConfigModule } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { OwnerController } from './presentation/controllers/owner.controller';
 import { OwnerRepository } from './application/interfaces/owner.repository.interface';
 import { PrismaOwnerRepository } from './infratructure/repositories/prisma-owner-repository';
@@ -106,6 +106,11 @@ import { DeleteOwnerUseCase } from './application/use-cases/delete-owner.usecase
     {
       provide: StorageService,
       useClass: S3StorageService,
+    },
+    {
+      provide: ClientKafka,
+      useFactory: (client: ClientKafka) => client,
+      inject: ['KAFKA_CLIENT'],
     },
   ],
 })

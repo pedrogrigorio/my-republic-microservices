@@ -3,7 +3,7 @@ import { ApplicationStatus } from '../../domain/enums/application-status';
 export class ApplicationResponseDto {
   id: number;
   status: ApplicationStatus;
-  createdAt: Date;
+  createdAt: string;
   message: string;
   applicant: {
     id: number;

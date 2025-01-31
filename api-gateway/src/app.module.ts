@@ -1,4 +1,5 @@
 import { AdvertisementModule } from './modules/advertisement/advertisement.module';
+import { ApplicationModule } from './modules/application/application.module';
 import { JwtAuthGuard } from './modules/auth/infrastrucutre/guards/jwt-auth.guard';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
@@ -10,6 +11,7 @@ import { Module } from '@nestjs/common';
   imports: [
     UserModule,
     AuthModule,
+    ApplicationModule,
     AdvertisementModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],

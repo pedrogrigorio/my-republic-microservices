@@ -9,6 +9,7 @@ import { Advertisement } from '../../domain/entities/advertisement';
 import { Injectable } from '@nestjs/common';
 import { StorageService } from '../interfaces/storage.service.interface';
 import { FileDto } from '../dtos/file.dto';
+import { ClientKafka } from '@nestjs/microservices';
 
 @Injectable()
 export class UpdateAdvertisementUseCase {
@@ -17,6 +18,7 @@ export class UpdateAdvertisementUseCase {
     private amenityRepository: AmenityRepository,
     private ruleRepository: RuleRepository,
     private storageService: StorageService,
+    private readonly kafkaClient: ClientKafka,
   ) {}
 
   async execute(
@@ -70,6 +72,16 @@ export class UpdateAdvertisementUseCase {
 
     const updatedAdvertisement =
       await this.advertisementRepository.update(advertisement);
+
+    this.kafkaClient.emit('advertisement.updated', {
+      id: updatedAdvertisement.id,
+      title: updatedAdvertisement.title,
+      imgSrc: updatedAdvertisement.imgSrc,
+      price : updatedAdvertisement.price,
+      cityName : updatedAdvertisement.city.name,
+      stateUF: updatedAdvertisement.state.uf,
+      isActive: updatedAdvertisement.isActive,
+    });
 
     return AdvertisementMapper.toDto(updatedAdvertisement);
   }

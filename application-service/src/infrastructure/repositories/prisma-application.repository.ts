@@ -81,7 +81,7 @@ export class PrismaApplicationRepository implements ApplicationRepository {
       skip: skip,
       take: pageSize,
     });
-
+    
     const appsDto = applications.map((app) =>
       PrismaApplicationMapper.toDomain(app),
     );

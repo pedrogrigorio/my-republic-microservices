@@ -9,9 +9,9 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: 'user',
-      protoPath: 'src/proto/user.proto',
-      url: 'user_service:3002',
+      package: 'application',
+      protoPath: 'src/proto/application.proto',
+      url: 'application_service:3004',
     },
   });
 
@@ -23,7 +23,7 @@ async function bootstrap() {
         brokers: ['kafka:9092'],
       },
       consumer: {
-        groupId: 'user-service-consumer',
+        groupId: 'application-service-consumer',
       },
     },
   });

@@ -1,3 +1,4 @@
+import { AdvertisementNotFoundException } from 'src/domain/exceptions/advertisement-not-found.exception';
 import { ApplicationNotFoundException } from 'src/domain/exceptions/application-not-found.exception';
 import { AdvertisementPausedException } from 'src/domain/exceptions/advertisement-paused.exception';
 import { RpcException } from '@nestjs/microservices';
@@ -13,7 +14,10 @@ export class GrpcExceptionHandler {
     if (error instanceof AdvertisementPausedException) {
       code = status.INVALID_ARGUMENT;
       message = error.message;
-    } else if (error instanceof ApplicationNotFoundException) {
+    } else if (
+      error instanceof ApplicationNotFoundException || 
+      error instanceof AdvertisementNotFoundException
+    ) {
       code = status.NOT_FOUND;
       message = error.message;
     }

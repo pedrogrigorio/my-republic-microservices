@@ -1,5 +1,5 @@
-import { AdvertisementNotFoundException } from '@src/modules/advertisement/domain/exceptions/advertisement-not-found.exception';
-import { AdvertisementRepository } from '@src/modules/advertisement/application/interfaces/advertisement.repository.interface';
+import { AdvertisementNotFoundException } from 'src/domain/exceptions/advertisement-not-found.exception';
+import { AdvertisementRepository } from '../interfaces/advertisement.repository.interface';
 import { ApplicationRepository } from '../interfaces/application.repository.interface';
 import { CreateApplicationDto } from '../dtos/create-application.dto';
 import { Application } from '../../domain/entities/application';
