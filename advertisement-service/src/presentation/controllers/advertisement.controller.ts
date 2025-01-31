@@ -9,12 +9,14 @@ import { PauseAdvertisementUseCase } from '../../application/use-cases/pause-adv
 import { GrpcExceptionHandler } from '../handlers/grpc-exception-handler';
 import { Controller } from '@nestjs/common';
 import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
+import { IncrementOccupiedSlotsUseCase } from 'src/application/use-cases/increment-occupied-slots.usecase';
 
 @Controller('advertisements')
 export class AdvertisementController {
   constructor(
     private searchAdvertisementsByCityUseCase: SearchAdvertisementsByCityUseCase,
     private getAdvertisementsByOwnerUseCase: GetAdvertisementsByOwnerUseCase,
+    private incrementOccupiedSlotsUseCase: IncrementOccupiedSlotsUseCase,
     private getAllAdvertisementsUseCase: GetAllAdvertisementsUseCase,
     private deleteAdvertisementUseCase: DeleteAdvertisementUseCase,
     private createAdvertisementUseCase: CreateAdvertisementUseCase,
@@ -22,6 +24,15 @@ export class AdvertisementController {
     private pauseAdvertisementUseCase: PauseAdvertisementUseCase,
     private getAdvertisementById: GetAdvertisementByIdUseCase,
   ) {}
+
+  @MessagePattern('application.accepted')
+  async handleincrementOccupiedSlots(@Payload() data: any) {
+    try {
+      await this.incrementOccupiedSlotsUseCase.execute(data.advertisementId)
+    } catch (error) {
+      console.log(error)
+    } 
+  }
 
   @GrpcMethod('AdvertisementService', 'getAllAdvertisements')
   async getAllAdvertisements() {

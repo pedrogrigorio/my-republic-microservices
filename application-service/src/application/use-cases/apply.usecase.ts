@@ -27,12 +27,14 @@ export class ApplyUseCase {
       );
     }
 
+    console.log('criando aplicação')
     const application = new Application({
       advertisementId,
       message,
       applicantId: userId,
     });
 
+    console.log('aplicação criada')
     await this.applicationRepository.create(application);
   }
 }

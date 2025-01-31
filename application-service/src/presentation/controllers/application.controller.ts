@@ -52,6 +52,7 @@ export class ApplicationController {
   @GrpcMethod('ApplicationService', 'apply')
   async apply(data: any) {
     try {
+      console.log('Chegou requisição', data)
       await this.applyUseCase.execute(
         data.userId,
         data.body,

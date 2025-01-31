@@ -12,7 +12,7 @@ import { ApplyUseCase } from './application/use-cases/apply.usecase';
 import { Module } from '@nestjs/common';
 import { AdvertisementRepository } from './application/interfaces/advertisement.repository.interface';
 import { PrismaAdvertisementRepository } from './infrastructure/repositories/prisma-advertisement-repository';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { AdvertisementController } from './presentation/controllers/advertisement.controller';
 import { CreateAdvertisementUseCase } from './application/use-cases/create-advertisement.usecase';
 import { UpdateAdvertisementUseCase } from './application/use-cases/update-advertisement.usecase';
@@ -65,6 +65,11 @@ import { PrismaApplicantRepository } from './infrastructure/repositories/prisma-
     {
       provide: ApplicantRepository,
       useClass: PrismaApplicantRepository,
+    },
+    {
+      provide: ClientKafka,
+      useFactory: (client: ClientKafka) => client,
+      inject: ['KAFKA_CLIENT'],
     },
   ],
 })

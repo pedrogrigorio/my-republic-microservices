@@ -11,7 +11,8 @@ export class PrismaApplicationRepository implements ApplicationRepository {
 
   async create(application: Application): Promise<void> {
     const rawApplication = PrismaApplicationMapper.toPrisma(application);
-
+    console.log(rawApplication)
+    
     await this.prisma.application.create({
       data: {
         applicantId: rawApplication.applicantId,

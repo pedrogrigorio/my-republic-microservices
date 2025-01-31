@@ -1,14 +1,17 @@
-// import { IncrementOccupiedSlotsUseCase } from '@src/modules/advertisement/application/use-cases/increment-occupied-slots.usecase';
 import { ApplicationNotFoundException } from '../../domain/exceptions/application-not-found.exception';
 import { AdvertisementPausedException } from '../../domain/exceptions/advertisement-paused.exception';
 import { ApplicationRepository } from '../interfaces/application.repository.interface';
 import { ApplicationStatus } from '../../domain/enums/application-status';
 // import { NotificationType } from '@src/modules/notification/domain/enums/notification-type';
 import { Injectable } from '@nestjs/common';
+import { ClientKafka } from '@nestjs/microservices';
 
 @Injectable()
 export class AcceptApplicationUseCase {
-  constructor(private applicationRepository: ApplicationRepository) {}
+  constructor(
+    private applicationRepository: ApplicationRepository, 
+    private readonly kafkaClient: ClientKafka,
+  ) {}
 
   async execute(applicationId: number) {
     const application =
@@ -32,10 +35,11 @@ export class AcceptApplicationUseCase {
     //   message: `Você foi aceito na república ${application.advertisement.title}`,
     // });
 
-    // Substituir por evento
-    // await this.incrementOccupiedSlotsUseCase.execute(
-    //   application.advertisement.id,
-    // );
+    this.kafkaClient.emit('application.accepted', {
+      id: application.id,
+      advertisementId: application.advertisementId,
+      applicantId: application.applicantId,
+    });
 
     await this.applicationRepository.update(application);
   }
