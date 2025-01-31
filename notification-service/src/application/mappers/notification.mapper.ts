@@ -7,7 +7,7 @@ export class NotificationMapper {
       id: notification.id,
       message: notification.message,
       isRead: notification.isRead,
-      createdAt: notification.createdAt,
+      createdAt: notification.createdAt.toUTCString(),
       type: notification.type,
       recipientId: notification.recipientId,
     };

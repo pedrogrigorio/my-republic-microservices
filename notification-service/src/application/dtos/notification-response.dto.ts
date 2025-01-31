@@ -5,6 +5,6 @@ export class NotificationResponseDto {
   message: string;
   isRead: boolean;
   type: NotificationType;
-  createdAt: Date;
+  createdAt: string;
   recipientId: number;
 }

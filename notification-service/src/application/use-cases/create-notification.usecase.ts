@@ -8,8 +8,6 @@ export class CreateNotificationUseCase {
   constructor(private notificationRepository: NotificationRepository) {}
 
   async execute(createNotificationDto: CreateNotificationDto): Promise<void> {
-    console.log(createNotificationDto);
-
     const notification = new Notification({
       recipientId: createNotificationDto.recipientId,
       message: createNotificationDto.message,
