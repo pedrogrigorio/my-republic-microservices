@@ -14,7 +14,6 @@ export class AdvertisementController {
 
   @MessagePattern('advertisement.created')
   async handleAdvertisementCreated(@Payload() data: any) {
-    console.log('consumiu advertisement created')
     try {
       await this.createAdvertisementUseCase.execute(data)
     } catch (error) {
