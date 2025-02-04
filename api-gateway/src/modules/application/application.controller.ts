@@ -37,12 +37,14 @@ export class ApplicationController {
       throw new RpcException(e);
     });
 
+    if (!applications) return;
+
     const formattedApplications = applications.map((app: any) => ({
       ...app,
       createdAt: new Date(app.createdAt), // Convertendo para Date
     }));
 
-    return { applications: formattedApplications };
+    return formattedApplications;
   }
 
   @Get('get-by-user')
@@ -53,7 +55,17 @@ export class ApplicationController {
       throw new RpcException(e);
     });
 
-    return response;
+    if (!response.applications) return response;
+
+    const formattedApplications = response.applications.map((app: any) => ({
+      ...app,
+      createdAt: new Date(app.createdAt),
+    }));
+
+    return {
+      total: response.total,
+      applications: formattedApplications,
+    };
   }
 
   @Get('get-by-ad/:id')
@@ -68,7 +80,17 @@ export class ApplicationController {
       throw new RpcException(e);
     });
 
-    return response;
+    if (!response.applications) return response;
+
+    const formattedApplications = response.applications.map((app: any) => ({
+      ...app,
+      createdAt: new Date(app.createdAt),
+    }));
+
+    return {
+      total: response.total,
+      applications: formattedApplications,
+    };
   }
 
   @Post()

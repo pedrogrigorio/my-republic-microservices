@@ -4,7 +4,7 @@ syntax = "proto3";
 package notification;
 
 service NotificationService {
-  rpc getAllNotifications (Empty) returns (NotificationListResponse);
+  rpc getAllNotifications (WithUserIdRequest) returns (NotificationListResponse);
   rpc getUnreadCount (WithUserIdRequest) returns (CountResponse);
   rpc getNotificationById (WithIdRequest) returns (NotificationResponse);
   rpc markAsRead (WithIdRequest) returns (Empty);

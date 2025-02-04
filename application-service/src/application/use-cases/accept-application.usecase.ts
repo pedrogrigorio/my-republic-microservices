@@ -2,7 +2,6 @@ import { ApplicationNotFoundException } from '../../domain/exceptions/applicatio
 import { AdvertisementPausedException } from '../../domain/exceptions/advertisement-paused.exception';
 import { ApplicationRepository } from '../interfaces/application.repository.interface';
 import { ApplicationStatus } from '../../domain/enums/application-status';
-// import { NotificationType } from '@src/modules/notification/domain/enums/notification-type';
 import { Injectable } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
 
@@ -29,16 +28,11 @@ export class AcceptApplicationUseCase {
 
     application.status = ApplicationStatus.ACCEPTED;
 
-    // this.eventEmitter.emit('notification.create', {
-    //   type: NotificationType.APPLICATION_ACCEPTED,
-    //   recipientId: application.applicantId,
-    //   message: `Você foi aceito na república ${application.advertisement.title}`,
-    // });
-
     this.kafkaClient.emit('application.accepted', {
       id: application.id,
       advertisementId: application.advertisementId,
       applicantId: application.applicantId,
+      advertisementTitle: application.advertisement.title,
     });
 
     await this.applicationRepository.update(application);

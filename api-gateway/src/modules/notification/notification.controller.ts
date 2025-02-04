@@ -20,19 +20,26 @@ export class NotificationController {
   }
 
   @Get()
-  async getAllNotifications() {
+  async getAllNotifications(@CurrentUserId() userId: number) {
     const { notifications } = await firstValueFrom(
-      this.notificationService.getAllNotifications({}),
+      this.notificationService.getAllNotifications({ userId }),
     ).catch((e) => {
       throw new RpcException(e);
     });
 
-    return notifications;
+    if (!notifications) return;
+
+    const formattedNotifications = notifications.map((notification: any) => ({
+      ...notification,
+      createdAt: new Date(notification.createdAt), // Convertendo para Date
+    }));
+
+    return formattedNotifications;
   }
 
   @Get('unread-count')
   async getUnreadCount(@CurrentUserId() userId: number) {
-    const { count } = await firstValueFrom(
+    const count = await firstValueFrom(
       this.notificationService.getUnreadCount({ userId }),
     ).catch((e) => {
       throw new RpcException(e);
@@ -51,7 +58,14 @@ export class NotificationController {
       throw new RpcException(e);
     });
 
-    return notification;
+    if (!notification) return;
+
+    const formattedNotification = {
+      ...notification,
+      createdAt: new Date(notification.createdAt), // Convertendo para Date
+    };
+
+    return formattedNotification;
   }
 
   @Patch(':id/read')

@@ -25,11 +25,11 @@ export class IncrementOccupiedSlotsUseCase {
     if (advertisement.occupiedSlots === advertisement.totalSlots) {
       advertisement.isActive = false;
 
-      // this.eventEmitter.emit('notification.create', {
-      //   recipientId: advertisement.owner.id,
-      //   type: NotificationType.ADVERTISEMENT_PAUSED,
-      //   message: `Seu anúncio entitulado ${advertisement.title} foi pausado automaticamente devido a quantidade de vagas remanescentes.`,
-      // });
+      this.kafkaClient.emit('advertisement.paused', {
+        id: advertisement.id,
+        title: advertisement.title,
+        ownerId: advertisement.owner.id,
+      });
     }
 
     const updatedAdvertisement = await this.advertisementRepository.update(advertisement);
