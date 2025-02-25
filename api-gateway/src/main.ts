@@ -8,6 +8,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new GrpcExceptionFilter());
+  app.enableCors({
+    origin: 'http://localhost:3000',
+  });
   await app.startAllMicroservices();
   await app.listen(3001);
   console.log('API Gateway running on port 3001');
